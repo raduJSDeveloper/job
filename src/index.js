@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
@@ -15,43 +15,44 @@ function App() {
   const [urare, schimbaUrarea] = useState("Munca, si iar munca!");
   const [apperance, updateVisibility] = useState(true);
 
-  function handlePrevious() {
-    if (step > 1) functiaDinUseState(step - 1); 
+
+  const handlePrevious = useCallback(() => {
+    if (step > 1) functiaDinUseState(step - 1);
     if (step === 5) schimbaUrarea("Munca, si iar munca!");
-  }
- 
+  }, [step]);
+
 
   function handleNext() {
     if (step < 5) functiaDinUseState(step + 1);
     if (step === 4) schimbaUrarea("Numai asa reusesti");
   }
 
-
-
   return (
-    <> 
-      {apperance && <div className="primaryContainer">
-        <div className="stepsIndexes">
-          {content.map((elem, _, arr) => (
-            <Span etapa={step} text={arr.indexOf(elem) + 1} key={elem} />
-          ))}
+    <>
+      {apperance && (
+        <div className="primaryContainer">
+          <div className="stepsIndexes">
+            {content.map((elem, _, arr) => (
+              <Span etapa={step} text={arr.indexOf(elem) + 1} key={elem} />
+            ))}
+          </div>
+          <span className="middleParagraph">
+            Etapa{step}:{content[step - 1]}
+          </span>
+          <span className="middleParagraph">{urare}</span>
+          <div className="btnContainer">
+            <button type="buttonType" onClick={handlePrevious}>
+              Inapoi
+            </button>
+            <button type="buttonType" onClick={handleNext}>
+              Inainte
+            </button>
+          </div>
         </div>
-        <span className="middleParagraph">
-          Etapa{step}:{content[step - 1]}
-        </span>
-        <span className="middleParagraph">{urare}</span>
-        <div className="btnContainer">
-
-          
-          <button type="buttonType" onClick={handlePrevious}>
-            Inapoi
-          </button>
-          <button type="buttonType" onClick={handleNext}>
-            Inainte
-          </button>
-        </div>
-      </div>}
-      <button onClick={()=> updateVisibility(!apperance)} className="closeBtn">✕</button>
+      )}
+      <button onClick={() => updateVisibility(!apperance)} className="closeBtn">
+        ✕
+      </button>
     </>
   );
 }
